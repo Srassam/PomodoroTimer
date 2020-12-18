@@ -14,7 +14,16 @@ var interval;
 
 
 //initialize the timer based on user's prefrence
-
+function setTime() {
+    var minutes;
+    if (status === "working") {
+        minutes = workMinutesInput.value.trim();
+    } else {
+        minutes = restMinutesInput.value.trim();
+    }
+    clearInterval(interval);
+    totalSeconds = minutes * 60;
+}
 //code for formatting the minutes and seconds based on html
 function formatMinutes() {
     var secondsLeft = totalSeconds - secondsElapsed;
@@ -49,13 +58,13 @@ function renderTime() {
     secondsDisplay.textContent = formatSeconds();
 
     //then checks on timer status
-    if (secondsElapsed > = totalSeconds) {
+    if (secondsElapsed >= totalSeconds) {
         if (status === "Working") {
             alert("Time for a break!");
         } else {
             alert("Get off social media, and back to work!");
         }
-        stopTimer();
+        stopTime();
     }
 }
 /*created a function to stop setInterval() in startTime,
@@ -63,6 +72,7 @@ but does not reset the timer*/
 function pauseTime() {
     clearInterval(interval);
     renderTime();
+
 }
 
 /*created a function to stop the timer, and will reset the secondsElapsed
@@ -71,8 +81,24 @@ function stopTime() {
     secondsElapsed = 0;
     setTimeout();
     renderTime();
-}
 
+}
+/* created a function for the toggle switch. the user 
+can switch modes depending on working or rest*/
+function toggleStatus(event) {
+    var checked = event.target.checked;
+
+    if (checked) {
+        status = "working";
+    } else {
+        status = "break";
+    }
+    statusSpan.textContent = status;
+
+    secondsElapsed = 0;
+    setTime();
+    renderTime();
+}
 
 function startTimer() {
     // Write code to start the timer here
