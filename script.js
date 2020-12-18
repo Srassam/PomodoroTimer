@@ -7,9 +7,11 @@ var minutesDisplay = document.querySelector("#minutes");
 var secondsDisplay = document.querySelector("#seconds");
 var workMinutesInput = document.querySelector("#work-minutes");
 var restMinutesInput = document.querySelector("#rest-minutes");
+var inputs = document.querySelector(".inputs")
 
 var totalSeconds = 0;
 var secondsElapsed = 0;
+var status = "woking";
 var interval;
 
 
@@ -25,37 +27,37 @@ function setTime() {
     totalSeconds = minutes * 60;
 }
 //code for formatting the minutes and seconds based on html
-function formatMinutes() {
+function formattedMinutes() {
     var secondsLeft = totalSeconds - secondsElapsed;
 
     var minutesLeft = Math.floor(secondsLeft / 60);
 
     var formattedMinutes;
 
-    if (minutesaleft < 10) {
-        formatMinutes = "0" + minutesLeft;
+    if (minutesLeft < 10) {
+        formattedMinutes = "0" + minutesLeft;
     } else {
-        formattedMinutes = minutesaLeft
+        formattedMinutes = minutesLeft
     }
     return formattedMinutes;
 }
 
-function formatSeconds() {
+function formattedSeconds() {
     var secondsLeft = (totalSeconds - secondsElapsed) % 60;
 
-    var formatSeconds;
+    var formattedSeconds;
     if (secondsLeft < 10) {
-        formatSeconds = "0" + secondsLeft;
+        formattedSeconds = "0" + secondsLeft;
     } else {
-        formatSeconds = secondsLeft
+        formattedSeconds = secondsLeft
     }
-    return formatSeconds;
+    return formattedSeconds;
 }
 //function and conditionals created to notify the user if time for break || back to work
 function renderTime() {
-    //when fucntion called, sets the text content for the timer
-    minutesDisplay.textContent = formatMinutes();
-    secondsDisplay.textContent = formatSeconds();
+    //when function called, sets the text content for the timer
+    minutesDisplay.textContent = formattedMinutes();
+    secondsDisplay.textContent = formattedSeconds();
 
     //then checks on timer status
     if (secondsElapsed >= totalSeconds) {
@@ -79,7 +81,7 @@ function pauseTime() {
 and calls "setTime()" that will reset the timer*/
 function stopTime() {
     secondsElapsed = 0;
-    setTimeout();
+    setTime();
     renderTime();
 
 }
@@ -101,7 +103,41 @@ function toggleStatus(event) {
 }
 
 function startTimer() {
-    // Write code to start the timer here
+    setTime();
+    if (totalSeconds > 0) {
+        interval = setInterval(function () {
+            secondsElapsed++;
+            renderTime();
+        }, 1000);
+    } else {
+        alert("Invalid input, minutes must be greater than zero.")
+    }
+}
+// created a function for local storage.
+function setTimePreferences() {
+    localStorage.setItem(
+        "preferences",
+        JSON.stringify({
+            workMinutes: workMinutesInput.value.trim(),
+            restMinutes: restMinutesInput.value.trim(),
+        })
+    );
+}
+//checked to see if any prefrences have been setin local storage
+function getTimePreferences() {
+    var prefrence = JSON.parse(localStorage.getItem("prefrences"));
+    if (prefrences) {
+        if (prefrences.workMinutes) {
+            workMinutesInput.vaue = prefrences.workMinutes;
+        }
+    }
+    setTime();
+    renderTime();
 }
 
 playButton.addEventListener("click", startTimer);
+pauseButton.addEventListener("click", pauseTime);
+stopButton.addEventListener("click", stopTime);
+statusToggle.addEventListener("change", toggleStatus);
+inputs.addEventListener("change", setTimePreferences);
+inputs.addEventListener("keyup", setTimePreferences);
