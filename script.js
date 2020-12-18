@@ -14,11 +14,7 @@ var interval;
 
 
 //initialize the timer based on user's prefrence
-function timePref() {
-    if ()
-        workMinutesInput = totalSeconds;
 
-}
 //code for formatting the minutes and seconds based on html
 function formatMinutes() {
     var secondsLeft = totalSeconds - secondsElapsed;
@@ -36,8 +32,48 @@ function formatMinutes() {
 }
 
 function formatSeconds() {
+    var secondsLeft = (totalSeconds - secondsElapsed) % 60;
 
+    var formatSeconds;
+    if (secondsLeft < 10) {
+        formatSeconds = "0" + secondsLeft;
+    } else {
+        formatSeconds = secondsLeft
+    }
+    return formatSeconds;
 }
+//function and conditionals created to notify the user if time for break || back to work
+function renderTime() {
+    //when fucntion called, sets the text content for the timer
+    minutesDisplay.textContent = formatMinutes();
+    secondsDisplay.textContent = formatSeconds();
+
+    //then checks on timer status
+    if (secondsElapsed > = totalSeconds) {
+        if (status === "Working") {
+            alert("Time for a break!");
+        } else {
+            alert("Get off social media, and back to work!");
+        }
+        stopTimer();
+    }
+}
+/*created a function to stop setInterval() in startTime,
+but does not reset the timer*/
+function pauseTime() {
+    clearInterval(interval);
+    renderTime();
+}
+
+/*created a function to stop the timer, and will reset the secondsElapsed
+and calls "setTime()" that will reset the timer*/
+function stopTime() {
+    secondsElapsed = 0;
+    setTimeout();
+    renderTime();
+}
+
+
 function startTimer() {
     // Write code to start the timer here
 }
